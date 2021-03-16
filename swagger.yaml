@@ -5,7 +5,7 @@ info:
   title: Rest API documentation
   termsOfService: 'http://swagger.io/terms/'
   contact:
-    email: hammami.nihed.123@gmail.com
+    email: emnasaada3@gmail.com
 paths:
   /user/login:
     post:

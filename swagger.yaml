@@ -1,0 +1,297 @@
+openapi: 3.0.0
+info:
+  description: Rest API doc
+  version: 1.0.0-oas3
+  title: Rest API documentation
+  termsOfService: 'http://swagger.io/terms/'
+  contact:
+    email: hammami.nihed.123@gmail.com
+paths:
+  /user/login:
+    post:
+      tags:
+        - User Module
+      summary: Login
+      description: API for Login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+        description: Login Payload
+        required: true
+      responses:
+        '200':
+          description: Login Successfully
+        '404':
+          - $ref: 'C:/Users/Emna/Desktop/Swagger/node-api/responses.yaml#/responses/response_404'
+        '500':
+          description: Internal Server Error
+  /user/signup:
+    post:
+      tags:
+        - User Module
+      summary: Signup
+      description: API for Signup
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+        description: Signup Payload
+        required: true
+      responses:
+        '200':
+          description: Signup Successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        '400':
+          description: Invalid Fields
+        '500':
+          description: Internal Server Error
+  /profile:
+    get:
+      summary: User Profile
+      description: >-
+        The User Profile endpoint returns information about the user that has
+        authorized with the application.
+      tags:
+        - User Profile
+      security:
+        - Bearer: []
+      responses:
+        '200':
+          description: Profile information for a user
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Profile'
+        default:
+          description: Unexpected error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+  /acounts:
+    get:
+      tags:
+        - account
+      summary: Get user's accounts
+      description: Performable only by logged user
+      operationId: getAccountsList
+      security:
+        - Bearer: []
+      parameters:
+        - in: query
+          name: id
+          description: User id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Account'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Account'
+        '400':
+          description: User not logged in
+  /product:
+    post:
+      security:
+        - Bearer: []
+      tags:
+        - Product Module
+      summary: Product API
+      description: API for creating product
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+        description: Create Product Payload
+        required: true
+      responses:
+        '200':
+          description: Product Created Successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        '400':
+          description: Invalid Fields
+        '500':
+          description: Internal Server Error
+  /products:
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - Product Module
+      summary: Product API
+      description: API for fetching all products
+      parameters:
+        - name: skip
+          in: query
+          description: No.of record to be skipped for pagination
+          required: false
+          schema:
+            type: number
+        - name: limit
+          in: query
+          description: no. of record api should return for pagination
+          required: false
+          schema:
+            type: number
+      responses:
+        '200':
+          description: Product fetched Successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Products'
+        '400':
+          description: Invalid Fields
+        '500':
+          description: Internal Server Error
+  '/product/{id}':
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - Product Module
+      summary: Gets a Product By ID
+      description: Gets a Product By ID
+      parameters:
+        - name: id
+          in: path
+          description: Product Id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Product Fetched Successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '400':
+          description: Invalid Fields
+        '500':
+          description: Internal Server Error
+    put:
+      security:
+        - Bearer: []
+      tags:
+        - Product Module
+      summary: Update Product
+      description: Update Product
+      parameters:
+        - name: id
+          in: path
+          description: Product Id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+        description: Update Product Payload
+        required: true
+      responses:
+        '200':
+          description: Product Updated Successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        '400':
+          description: Invalid Fields
+        '500':
+          description: Internal Server Error
+    delete:
+      security:
+        - Bearer: []
+      tags:
+        - Product Module
+      summary: Remove Product
+      description: Remove Product
+      parameters:
+        - name: id
+          in: path
+          description: Product Id
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Product Deleted Successfully
+        '400':
+          description: Invalid Fields
+        '500':
+          description: Internal Server Error
+servers:
+  - url: 'http://localhost:3002'
+components:
+  securitySchemes:
+    Bearer:
+      type: apiKey
+      name: Authorization
+      in: header
+  schemas:
+    Account:
+      type: object
+      required:
+        - id
+        - user
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 12
+    User:
+      properties:
+        email:
+          type: string
+          description: email of user
+        password:
+          type: string
+          description: password of the user
+    Profile:
+      properties:
+        email:
+          type: string
+          description: Email address of  user
+    Product:
+      properties:
+        name:
+          type: string
+          description: product name
+        price:
+          type: number
+          description: product price
+        brand:
+          type: string
+          description: product brand
+    Products:
+      type: array
+      items:
+        $ref: '#/components/schemas/Product'
+    ApiResponse:
+      type: object
+      properties:
+        status:
+          type: integer
+        message:
+          type: string
+        body:
+          type: object

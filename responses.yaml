@@ -1,0 +1,53 @@
+responses:
+  response_200:
+      description: Success
+      schema:
+        type: object
+        properties:
+          status:
+            type: integer
+            description: status code
+            example: 200
+          message:
+            type: string
+            description: status string
+            example: "Everything is proceeding as I have foreseen."
+  response_201:
+    description: Value Stored
+    schema:
+      type: object
+      properties:
+        status:
+          type: integer
+          description: status code
+          example: 201
+        message:
+          type: string
+          description: status string
+          example: "Good, good - let the data flow through you."
+  response_404:
+      description: Not Found
+      schema:
+        type: object
+        properties:
+          status:
+            type: integer
+            description: status code
+            example: 404
+          message:
+            type: string
+            description: status string
+            example: "This was not the request you're looking for."
+  response_500:
+    description: server error
+    schema:
+      type: object
+      properties:
+        status:
+          type: integer
+          description: status code
+          example: 500
+        message:
+          type: string
+          description: status string
+          example: "There is a great disturbance in the server."
